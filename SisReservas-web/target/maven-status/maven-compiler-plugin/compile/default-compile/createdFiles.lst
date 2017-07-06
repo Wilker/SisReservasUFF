@@ -1,0 +1,5 @@
+br\uff\dac\sisreservas\controller\CampusController.class
+br\uff\dac\sisreservas\controller\LoginController.class
+br\uff\dac\sisreservas\controller\UsuarioController.class
+br\uff\dac\sisreservas\controller\TemplateController.class
+br\uff\dac\sisreservas\controller\MenuController.class

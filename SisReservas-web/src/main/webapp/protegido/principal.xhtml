@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="content" >
+                <style>
+                    .flex-container {
+                        padding: 0;
+                        margin: 0;
+                        list-style: none;
+                        display: -webkit-box;
+                        display: -moz-box;
+                        display: -ms-flexbox;
+                        display: -webkit-flex;
+                        display: flex;
+                        -webkit-flex-flow: row wrap;
+                        justify-content: space-around;
+                    }
+
+                    .flex-item {
+                        background: tomato;
+                        padding: 5px;
+                        width: 200px;
+                        height: 150px;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                        line-height: 150px;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 1.5em;
+                        text-align: center;
+                        align-self:flex-start;
+                    }
+                    a:link {
+                        color: white;
+                    }
+                    a:visited {
+                        color: white;
+                    }
+
+                    a:hover {
+                        color: #64dd17;
+                    }
+
+                    a:active {
+                        color: white;
+                    }
+                </style>
+                <div class="container z-depth-4 teal lighten-1" style="padding:10px">
+                    <h4 style="text-align: center; color:white" >Gerenciar</h4>
+                    <ul class="flex-container">
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/usuario.sis">Usuários<i class="material-icons left">supervisor_account</i></a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/campus.sis">Campi<i class="material-icons left">view_module</i></a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/predio.sis">Prédios<i class="material-icons left">business</i></a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/andar.sis">Andares<i class="material-icons left">view_column</i></a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/sala.sis">Salas<i class="material-icons left">my_location</i></a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/recurso.sis">Recursos<i class="material-icons left">videocam</i></a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/reserva.sis">Reservas<i class="material-icons left">library_books</i></a></li>
+                    </ul>   
+
+
+
+                </div>
+
+                <div class="section">
+
+                </div>
+
+                <div class="container z-depth-4 teal lighten-1" style="padding:10px">
+                    <h4 style="text-align: center; color:white" >Minha Conta</h4>
+                    <ul class="flex-container">
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/perfil.sis">Perfil<i class="material-icons left">perm_identity</i> </a></li>
+                        <li class="flex-item z-depth-4 teal darken-2"><a href="./../protegido/reserva.sis">Reservas<i class="material-icons left">library_books</i></a></li>
+                    </ul>   
+                </div>
+                <div class="section">
+
+                </div>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

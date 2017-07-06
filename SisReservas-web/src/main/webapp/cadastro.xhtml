@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>SisReserva UFF - Novo Cadastro de Usuário</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h1>Faça aqui seu cadastro!</h1>
+            <p:messages id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" />
+            <p:fieldset legend="Dados do Usuário">
+                <h:panelGrid columns="3" id="pgDadosUsuario">
+                    <p:outputLabel for="txtNome" value="Nome" />
+
+                    <p:inputText id="txtNome" value="#{usuarioController.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!" />
+
+                    <p:message for="txtNome" /> 
+
+                    <p:outputLabel for="txtCPF" value="CPF" />
+
+                    <p:inputText id="txtCPF" value="#{usuarioController.pessoa.cpf}" required="true" requiredMessage="O CPF é obrigatório!" />
+
+                    <p:message for="txtCPF" /> 
+
+                    <p:outputLabel for="txtTelefone" value="Telefone" />
+
+                    <p:inputText id="txtTelefone" value="#{usuarioController.pessoa.telefone}" required="true" requiredMessage="O telefone é obrigatório!" />
+
+                    <p:message for="txtTelefone" /> 
+
+                    <p:outputLabel for="txtEndereco" value="Endereço" />
+
+                    <p:inputText id="txtEndereco" value="#{usuarioController.pessoa.endereco}" required="true" requiredMessage="O endereço é obrigatório!" />
+
+                    <p:message for="txtEndereco" />         
+
+                </h:panelGrid>
+            </p:fieldset>
+
+            <p:fieldset legend="Dados da Conta">
+                <h:panelGrid  columns="3" id="pgDadosConta">
+       
+                    <p:outputLabel for="txtEmail" value="E-mail" />
+
+                    <p:inputText id="txtEmail" value="#{usuarioController.usuario.email}" required="true" requiredMessage="O e-mail é obrigatório!" />
+
+                    <p:message for="txtEmail" /> 
+
+                    <p:outputLabel for="senha" value="Senha" />
+
+                    <p:password id="senha" value="#{usuarioController.usuario.senha}" required="true"
+                                feedback="true" promptLabel="Insira uma senha" weakLabel="Fraca"
+                                goodLabel="Boa" strongLabel="Forte" match="conf_senha"
+                                validatorMessage="As senhas não coincidem" requiredMessage="A senha é obrigatória!"/>
+
+                    <p:message for="senha" />
+
+                    <p:outputLabel for="conf_senha" value="Confirmar Senha" />
+
+                    <p:password id="conf_senha" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
+
+                    <p:message for="conf_senha" />
+
+                </h:panelGrid>
+                <p:commandButton value="Cadastrar" update="pgDadosConta, pgDadosUsuario, mensagem" actionListener="#{usuarioController.cadastrarPeloUsuarioExterno()}" />
+            </p:fieldset>
+        </h:form>
+    </h:body>
+</html>
+

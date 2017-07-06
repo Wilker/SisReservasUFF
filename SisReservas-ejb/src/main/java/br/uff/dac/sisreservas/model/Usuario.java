@@ -1,0 +1,87 @@
+package br.uff.dac.sisreservas.model;
+
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="usuario")
+public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @OneToOne(cascade=CascadeType.PERSIST)
+    @JoinColumn(name="id_usuario", referencedColumnName = "id_pessoa", nullable = false)
+    private Pessoa idUsuario;
+    
+    @Column(name="email")
+    private String email;
+    
+    @Column(name="senha")
+    private String senha;
+    
+    @Column(name="tipo")
+    private char tipo;
+
+    public Pessoa getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Pessoa idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public char getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(char tipo) {
+        this.tipo = tipo;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idUsuario != null ? idUsuario.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Usuario)) {
+            return false;
+        }
+        Usuario other = (Usuario) object;
+        if ((this.idUsuario == null && other.idUsuario != null) || (this.idUsuario != null && !this.idUsuario.equals(other.idUsuario))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.uff.dac.sisreservas.ejb.Usuario[ id=" + idUsuario + " ]";
+    }
+    
+}
