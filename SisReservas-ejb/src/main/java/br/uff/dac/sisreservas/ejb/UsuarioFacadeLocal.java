@@ -23,4 +23,6 @@ public interface UsuarioFacadeLocal {
     
     Usuario Login(Usuario user);
     
+    boolean emailExiste(Usuario user);
+    
 }
