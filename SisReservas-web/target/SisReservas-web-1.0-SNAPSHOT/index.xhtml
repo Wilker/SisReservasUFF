@@ -2,46 +2,151 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>SisReserva - UFF</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
         <link href="resources/css/materialize.min.css" rel="stylesheet" type="text/css"/>
         <script src="resources/js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="resources/js/materialize.min.js" type="text/javascript"></script>
+        <f:event type="preRenderView" listener="#{loginController.verificarLogin()}"/>
     </h:head>
     <h:body>
-        <div class="section">
-            
-        </div>
-        <div class="container z-depth-4 teal darken-1" style="padding: 10px; width:50%">
-            <h:form >
-                <h2 style="text-align: center; color:white" >SisReservas UFF</h2>
-                <p:messages id="mensagem" autoUpdate="false" severity="info, fatal, warn" showDetail="true"/>
-                <p:panelGrid id="pgLogin" columns="1" styleClass="ui-noborder"   >
-                   
-                        <p:outputLabel for="txtEmail" value="E-mail" style="color:white" />
-                        <p:inputText id="txtEmail" value="#{loginController.usuario.email}" required="true" requiredMessage="E-mail obrigatório!" />
+        <style>
+            body
+            {
+                background: #f5f5f5;
+            }
 
-                    
-                    <p:message for="txtEmail" />
+            h5
+            {
+                font-weight: 400;
+            }
 
-                    
-                          <p:outputLabel for="txtSenha" value="Senha" style="color:white" />
-                    <p:password id="txtSenha" value="#{loginController.usuario.senha}" required="true" requiredMessage="Senha obrigatória!" />
-                    
-                   
-                  <p:message for="txtSenha" />
-                    <p:commandButton value="Login" class="waves-effect btn blue darken-3 right" update="pgLogin, mensagem" action="#{loginController.login()}" />
-                </p:panelGrid>
-            </h:form>
-            <p:separator/>
-            <div class="center-align">
-                <a href="cadastro.sis" class="waves-effect btn blue-grey darken-2">Cadastre-se</a>
+            .container
+            {
+                margin-top: 60px;
+                width: 400px;
+                height: 720px;
+            }
+
+            .tabs .indicator
+            {
+                background-color: #e0f2f1;
+                height: 60px;
+                opacity: 0.3;
+            }
+
+            .form-container
+            {
+                padding: 40px;
+                padding-top: 10px;
+            }
+
+            .confirmation-tabs-btn
+            {
+                position: absolute;
+            }
+        </style>
+
+        <div class="container white z-depth-2">
+            <ul class="tabs teal">
+                <li class="tab"><a class="white-text active" href="#login">login</a></li>
+                <li class="tab"><a class="white-text" href="#register">cadastrar</a></li>
+            </ul>
+            <div id="login" class="col">
+                <h:form class="col">
+                    <p:messages id="mensagem" autoUpdate="false" severity="info, fatal, warn" showDetail="true"/>
+                    <div class="form-container">
+                        <h4 class="teal-text center">SisReservas - UFF</h4>
+                        <h5 class="teal-text center">Login</h5>
+                        <br/>
+                        <div class="row">
+                            <div class="input-field">
+                                <p:inputText id="txtEmail" value="#{loginController.usuario.email}" required="true" requiredMessage="E-mail obrigatório!"/>
+                                <label for="txtEmail">E-mail</label>
+                            </div>
+                            <p:message id="msgEmail" for="txtEmail" />
+                        </div>
+                        <div class="row">
+                            <div class="input-field">
+                                <p:password id="txtSenha" value="#{loginController.usuario.senha}" required="true" requiredMessage="Senha obrigatória!" />
+                                <label for="txtSenha">Senha</label>
+                            </div>
+                            <p:message id="msgSenha" for="txtSenha" />
+                        </div>
+                        <br/>
+                        <center>
+                            <p:commandButton value="Login" class="btn waves-effect waves-light teal" update="msgSenha, msgEmail, mensagem" action="#{loginController.login()}" />
+                            <br/>
+                            <br/>
+                            <a href="forgot.sis">Esqueceu a senha?</a>
+                        </center>
+                    </div>
+                </h:form>
             </div>
-            
+            <div id="register" >
+                <h:form >
+                    <p:growl id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" life="15000" />
+                    <div class="form-container">
+                        <h4 class="teal-text center">SisReservas - UFF</h4>
+                        <h5 class="teal-text center">Cadastro</h5>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <p:inputText id="txtCadNome" value="#{loginController.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!" />
+                                <label for="txtCadNome">Nome</label>
+                                <p:message id="msgCadNome" for="txtCadNome" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <p:inputText class="input-field" id="txtCadEmail" value="#{loginController.usuario.email}" required="true" requiredMessage="O e-mail é obrigatório!" />
+                                <label for="txtCadEmail">E-mail</label>
+                                <p:message id="msgCadEmail" for="txtCadEmail" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6 ">
+                                <p:inputText id="txtCadCPF" value="#{loginController.pessoa.cpf}" required="true" requiredMessage="O CPF é obrigatório!" />
+                                <label for="txtCadCPF">CPF</label>
+                                <p:message id="msgCadCPF" for="txtCadCPF" />
+                            </div>
+                            <div class="input-field col s6 ">
+                                <p:inputText id="txtCadTel" value="#{loginController.pessoa.telefone}" required="true" requiredMessage="O telefone é obrigatório!" />
+                                <label for="txtCadTel">Telefone</label>
+                                <p:message id="msgCadTel" for="txtCadTel" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 ">
+                                <p:inputText id="txtCadEndereco" value="#{loginController.pessoa.endereco}" required="true" requiredMessage="O endereço é obrigatório!" />
+                                <label for="txtCadEndereco">Endereço</label>
+                                <p:message id="msgCadEnd" for="txtCadEndereco" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <p:password id="senha" value="#{loginController.usuario.senha}" required="true"
+                                            feedback="true" promptLabel="Insira uma senha" weakLabel="Fraca"
+                                            goodLabel="Boa" strongLabel="Forte" match="conf_senha"
+                                            validatorMessage="As senhas não coincidem" requiredMessage="A senha é obrigatória!"/>
+                                <label for="senha">Senha</label>
+                                <p:message id="msgCadSenha" for="senha" />
+                            </div>
+                            <div class="input-field col s6">
+                                <p:password id="conf_senha" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
+                                <label for="conf_senha">Conf. Senha</label>
+                                <p:message id="msgCadConfSenha" for="conf_senha" />
+                            </div>
+                        </div>
+                        <center>
+                            <p:commandButton class="btn waves-effect waves-light teal" value="Cadastrar" update="msgCadNome, msgCadEmail, msgCadEnd, msgCadTel, msgCadSenha, msgCadConfSenha , mensagem" actionListener="#{loginController.cadastrar()}" />
+                        </center>
+                    </div>
+                </h:form>
+            </div>
         </div>
-
     </h:body>
 </html>
 

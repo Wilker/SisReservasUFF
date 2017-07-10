@@ -29,8 +29,8 @@ public class UsuarioController implements Serializable {
     @PostConstruct
     public void init() {
         this.usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        this.pessoa = this.usuario.getIdUsuario();
-        this.usuario.setIdUsuario(this.pessoa);
+        this.pessoa = this.usuario.getIdPessoa();
+        this.usuario.setIdPessoa(this.pessoa);
         this.usuarios = this.usuarioEJB.findAll();
     }
 
@@ -59,7 +59,7 @@ public class UsuarioController implements Serializable {
     }
 
     public boolean isLogado(Usuario user) {
-        return this.usuario.getIdUsuario().getIdPessoa().equals(user.getIdUsuario().getIdPessoa());
+        return this.usuario.getIdPessoa().getIdPessoa().equals(user.getIdPessoa().getIdPessoa());
     }
 
     public boolean isUsuarioAutenticado() {
@@ -79,7 +79,7 @@ public class UsuarioController implements Serializable {
 
     public void cadastrarPeloAdministrador() {
         try {
-            Usuario foundedUser = this.usuarioEJB.find(this.usuario.getIdUsuario().getIdPessoa());
+            Usuario foundedUser = this.usuarioEJB.find(this.usuario.getIdPessoa().getIdPessoa());
             if (foundedUser == null) {
                 this.criar();
             } else {
@@ -106,7 +106,7 @@ public class UsuarioController implements Serializable {
         try {
             this.usuarioEJB.edit(this.usuario);
             this.atualizarTabela();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Usuário " + this.usuario.getIdUsuario().getNome() + " editado com sucesso!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Usuário " + this.usuario.getIdPessoa().getNome() + " editado com sucesso!"));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao editar Usuário!"));
         }
@@ -131,7 +131,7 @@ public class UsuarioController implements Serializable {
 
     public void exibir(Usuario usuario) {
         this.usuario = usuario;
-        this.pessoa = this.usuario.getIdUsuario();
+        this.pessoa = this.usuario.getIdPessoa();
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("$('#dlgCadastroUsuario').modal('open');"
                                 + "setTimeout(function () {"

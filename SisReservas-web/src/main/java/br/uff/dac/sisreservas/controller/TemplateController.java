@@ -13,13 +13,17 @@ import javax.inject.Named;
 public class TemplateController implements Serializable {
 
     private Usuario usuario;
-    
+
     private String nomeUsuario;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        this.nomeUsuario = this.usuario.getIdUsuario().getNome().split(" ")[0];
+        if (this.usuario != null) {
+            this.nomeUsuario = this.usuario.getIdPessoa().getNome().split(" ")[0];
+        } else {
+            this.nomeUsuario = "";
+        }
     }
 
     public Usuario getUsuario() {
@@ -42,15 +46,13 @@ public class TemplateController implements Serializable {
         try {
             ExternalContext contexto = FacesContext.getCurrentInstance().getExternalContext();
             Usuario usuario = (Usuario) contexto.getSessionMap().get("usuario");
-            
-            if (usuario == null){
-                contexto.redirect("./../usuario.xhtml");
+
+            if (usuario == null) {
+                contexto.redirect("./../permissoes.sis");
             }
         } catch (Exception ex) {
             // Log 
         }
     }
 
-    
-    
 }
