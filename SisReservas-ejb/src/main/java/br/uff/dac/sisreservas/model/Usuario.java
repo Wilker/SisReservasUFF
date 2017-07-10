@@ -15,8 +15,8 @@ public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @OneToOne(cascade=CascadeType.PERSIST)
-    @JoinColumn(name="id_usuario", referencedColumnName = "id_pessoa", nullable = false)
-    private Pessoa idUsuario;
+    @JoinColumn(name="id_pessoa", referencedColumnName = "id_pessoa", nullable = false)
+    private Pessoa idPessoa;
     
     @Column(name="email")
     private String email;
@@ -27,12 +27,12 @@ public class Usuario implements Serializable {
     @Column(name="tipo")
     private char tipo;
 
-    public Pessoa getIdUsuario() {
-        return idUsuario;
+    public Pessoa getIdPessoa() {
+        return idPessoa;
     }
 
-    public void setIdUsuario(Pessoa idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdPessoa(Pessoa idPessoa) {
+        this.idPessoa = idPessoa;
     }
     
     public String getEmail() {
@@ -62,7 +62,7 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idUsuario != null ? idUsuario.hashCode() : 0);
+        hash += (idPessoa != null ? idPessoa.hashCode() : 0);
         return hash;
     }
 
@@ -73,7 +73,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.idUsuario == null && other.idUsuario != null) || (this.idUsuario != null && !this.idUsuario.equals(other.idUsuario))) {
+        if ((this.idPessoa == null && other.idPessoa != null) || (this.idPessoa != null && !this.idPessoa.equals(other.idPessoa))) {
             return false;
         }
         return true;
@@ -81,7 +81,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "br.uff.dac.sisreservas.ejb.Usuario[ id=" + idUsuario + " ]";
+        return "br.uff.dac.sisreservas.ejb.Usuario[ id=" + idPessoa + " ]";
     }
     
 }
