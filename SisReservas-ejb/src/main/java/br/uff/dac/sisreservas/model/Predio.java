@@ -24,10 +24,10 @@ public class Predio implements Serializable {
     @Column(name="nome")
     private String nome;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Campus campus;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "predio", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "predio")
     private List<Andar> andares;
 
     public Long getIdPredio() {

@@ -24,10 +24,10 @@ public class Andar implements Serializable {
     @Column(name="nivel")
     private int nivel;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Predio predio;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "andar", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "andar")
     private List<Sala> salas;
     
     

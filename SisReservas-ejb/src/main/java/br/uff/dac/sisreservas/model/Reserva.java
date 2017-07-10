@@ -43,10 +43,10 @@ public class Reserva implements Serializable {
     @Column(name="descricao")
     private String descricao;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserva")
     private List<Sala> salas;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Usuario usuario;
     
     

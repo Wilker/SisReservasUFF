@@ -5,50 +5,58 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>SisReserva UFF - Novo Cadastro de Usuário</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <link href="resources/css/materialize.min.css" rel="stylesheet" type="text/css"/>
+        <script src="resources/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="resources/js/materialize.min.js" type="text/javascript"></script>
     </h:head>
     <h:body>
         <h:form>
-            <h1>Faça aqui seu cadastro!</h1>
+            <h2 style="text-align: center">Faça aqui seu cadastro!</h2>
             <p:messages id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" />
-            <p:fieldset legend="Dados do Usuário">
-                <h:panelGrid columns="3" id="pgDadosUsuario">
-                    <p:outputLabel for="txtNome" value="Nome" />
+            <div class="container z-depth-4 teal darken-1" style="padding: 10px; width:70%">
+                <h3 style="color:white; text-align: center">Dados Pessoais</h3>
+                <h:panelGrid columns="1" id="pgDadosUsuario">
+                    <p:outputLabel style="color:white" for="txtNome" value="Nome" />
 
                     <p:inputText id="txtNome" value="#{usuarioController.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!" />
 
-                    <p:message for="txtNome" /> 
+                    <p:message for="txtNome" />
 
-                    <p:outputLabel for="txtCPF" value="CPF" />
+                    <p:outputLabel style="color:white" for="txtCPF" value="CPF" />
 
                     <p:inputText id="txtCPF" value="#{usuarioController.pessoa.cpf}" required="true" requiredMessage="O CPF é obrigatório!" />
 
-                    <p:message for="txtCPF" /> 
+                    <p:message for="txtCPF" />
 
-                    <p:outputLabel for="txtTelefone" value="Telefone" />
+                    <p:outputLabel style="color:white" for="txtTelefone" value="Telefone" />
 
                     <p:inputText id="txtTelefone" value="#{usuarioController.pessoa.telefone}" required="true" requiredMessage="O telefone é obrigatório!" />
 
-                    <p:message for="txtTelefone" /> 
+                    <p:message for="txtTelefone" />
 
-                    <p:outputLabel for="txtEndereco" value="Endereço" />
+                    <p:outputLabel style="color:white" for="txtEndereco" value="Endereço" />
 
                     <p:inputText id="txtEndereco" value="#{usuarioController.pessoa.endereco}" required="true" requiredMessage="O endereço é obrigatório!" />
 
-                    <p:message for="txtEndereco" />         
+                    <p:message for="txtEndereco" />  
 
                 </h:panelGrid>
-            </p:fieldset>
+            </div>
+            <div class="section">
 
-            <p:fieldset legend="Dados da Conta">
-                <h:panelGrid  columns="3" id="pgDadosConta">
-       
-                    <p:outputLabel for="txtEmail" value="E-mail" />
+            </div>
+            <div class="container z-depth-4 teal darken-1" style="padding: 10px; width:70%">
+                <h3 style="color:white; text-align: center">Dados do Usuário</h3>
+                <h:panelGrid  columns="1" id="pgDadosConta">
 
-                    <p:inputText id="txtEmail" value="#{usuarioController.usuario.email}" required="true" requiredMessage="O e-mail é obrigatório!" />
+                    <p:outputLabel style="color:white" for="txtEmail" value="E-mail" /> 
 
-                    <p:message for="txtEmail" /> 
+                    <p:inputText class="input-field" id="txtEmail" placeholder="E-mail" value="#{usuarioController.usuario.email}" required="true" requiredMessage="O e-mail é obrigatório!" />
 
-                    <p:outputLabel for="senha" value="Senha" />
+                    <p:message for="txtEmail" />
+
+                    <p:outputLabel style="color:white" for="senha" value="Senha" />
 
                     <p:password id="senha" value="#{usuarioController.usuario.senha}" required="true"
                                 feedback="true" promptLabel="Insira uma senha" weakLabel="Fraca"
@@ -57,16 +65,21 @@
 
                     <p:message for="senha" />
 
-                    <p:outputLabel for="conf_senha" value="Confirmar Senha" />
+                    <p:outputLabel style="color:white" for="conf_senha" value="Confirmar Senha" />
 
                     <p:password id="conf_senha" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
 
                     <p:message for="conf_senha" />
 
                 </h:panelGrid>
-                <p:commandButton value="Cadastrar" update="pgDadosConta, pgDadosUsuario, mensagem" actionListener="#{usuarioController.cadastrarPeloUsuarioExterno()}" />
-            </p:fieldset>
+                <div class="center-align">
+                    <p:commandButton class="btn waves-effect blue darken-2" value="Cadastrar" update="pgDadosConta, pgDadosUsuario, mensagem" actionListener="#{usuarioController.cadastrarPeloUsuarioExterno()}" />
+                </div>
+            </div>
         </h:form>
+        <div class="section">
+
+        </div>
     </h:body>
 </html>
 

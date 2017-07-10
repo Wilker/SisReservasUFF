@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 @Named("usuarioController")
 @ViewScoped
@@ -22,13 +23,13 @@ public class UsuarioController implements Serializable {
     private Usuario usuario;
 
     private List<Usuario> usuarios;
-    
+
     private Pessoa pessoa;
 
     @PostConstruct
     public void init() {
-        this.usuario = new Usuario();
-        this.pessoa = new Pessoa();
+        this.usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        this.pessoa = this.usuario.getIdUsuario();
         this.usuario.setIdUsuario(this.pessoa);
         this.usuarios = this.usuarioEJB.findAll();
     }
@@ -48,13 +49,22 @@ public class UsuarioController implements Serializable {
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-    
+
     public Pessoa getPessoa() {
         return pessoa;
     }
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
+    }
+
+    public boolean isLogado(Usuario user) {
+        return this.usuario.getIdUsuario().getIdPessoa().equals(user.getIdUsuario().getIdPessoa());
+    }
+
+    public boolean isUsuarioAutenticado() {
+        Usuario user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        return user != null;
     }
 
     public void cadastrarPeloUsuarioExterno() {
@@ -69,26 +79,43 @@ public class UsuarioController implements Serializable {
 
     public void cadastrarPeloAdministrador() {
         try {
+            Usuario foundedUser = this.usuarioEJB.find(this.usuario.getIdUsuario().getIdPessoa());
+            if (foundedUser == null) {
+                this.criar();
+            } else {
+                this.editar();
+            }
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.execute("$('#dlgCadastroUsuario').modal('close');");
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao tentar cadastrar Usuário!"));
+        }
+    }
+
+    private void criar() {
+        try {
             this.usuarioEJB.create(this.usuario);
+            this.atualizarTabela();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Cadastro realizado com sucesso!"));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao tentar cadastrar Usuário!"));
         }
     }
 
-    public boolean isUsuarioAutenticado() {
-        Usuario user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        return user != null;
-    }
-    
-       public void editar() {
+    private void editar() {
         try {
             this.usuarioEJB.edit(this.usuario);
-            this.usuarios = this.usuarioEJB.findAll();
+            this.atualizarTabela();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Usuário " + this.usuario.getIdUsuario().getNome() + " editado com sucesso!"));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao editar Usuário!"));
         }
+    }
+
+    public void atualizarTabela() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.usuarios = this.usuarioEJB.findAll();
+        requestContext.update(":formTabela:tabela");
     }
 
     public void excluir(Usuario usuario) {
@@ -96,6 +123,7 @@ public class UsuarioController implements Serializable {
             this.usuarioEJB.remove(usuario);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Usuário excluído com sucesso!"));
             this.usuarios = this.usuarioEJB.findAll();
+            this.atualizarTabela();
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao excluir Usuário!"));
         }
@@ -104,5 +132,11 @@ public class UsuarioController implements Serializable {
     public void exibir(Usuario usuario) {
         this.usuario = usuario;
         this.pessoa = this.usuario.getIdUsuario();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("$('#dlgCadastroUsuario').modal('open');"
+                                + "setTimeout(function () {"
+                                + "                             $('ul.tabs').tabs('select_tab', 'tabDadosPessoais');"
+                                + "                        }, 100);"
+                                + "$('#dlgCadastroUsuarioTitulo').text(\"Atualizar Usuário\");");
     }
 }

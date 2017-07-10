@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 @Named("campusController")
 @ViewScoped
@@ -46,15 +47,36 @@ public class CampusController implements Serializable {
 
     public void cadastrar() {
         try {
-            campusEJB.create(this.campus);
-            this.campi = campusEJB.findAll();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Campus " + this.campus.getNome() + " registrado com sucesso!"));
+            Campus foundedCampus = null;
+            if (this.campus.getIdCampus() != null){
+                foundedCampus = this.campusEJB.find(this.campus.getIdCampus());
+            }
+            if (foundedCampus == null) {
+                this.criar();
+            } else {
+                this.editar();
+            }
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.execute("$('#dlgCadastroCampus').modal('close');");
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao cadastrar Campus!"));
         }
     }
 
-    public void editar() {
+    private void criar() {
+        try {
+            this.campusEJB.create(this.campus);
+            this.atualizarTabela();
+            
+            String nomeCampus = this.campus.getNome();
+            this.campus = new Campus();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Campus " + nomeCampus + " registrado com sucesso!"));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao tentar cadastrar Campus!"));
+        }
+    }
+
+    private void editar() {
         try {
             campusEJB.edit(this.campus);
             this.campi = campusEJB.findAll();
@@ -64,18 +86,28 @@ public class CampusController implements Serializable {
         }
     }
 
+    public void atualizarTabela() {
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        this.campi = this.campusEJB.findAll();
+        requestContext.update(":formTabela:tabela");
+    }
+
     public void excluir(Campus campus) {
         try {
             campusEJB.remove(campus);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Campus excluído com sucesso!"));
             this.campi = campusEJB.findAll();
+            atualizarTabela();
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao excluir Campus!"));
         }
     }
 
     public void exibir(Campus campus) {
-        this.campus = campus;
+            this.campus = campus;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("$('#dlgCadastroCampus').modal('open');"
+                + "$('#dlgCadastroCampusTitulo').text(\"Teste Atualizar Campus\");");
     }
 
 }

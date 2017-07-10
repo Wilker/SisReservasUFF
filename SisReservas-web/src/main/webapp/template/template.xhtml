@@ -12,13 +12,12 @@
         <title>SisReserva - UFF</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
         <link href="../resources/css/materialize.min.css" rel="stylesheet" type="text/css"/>
-        <script src="../resources/js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <script src="../resources/js/materialize.min.js" type="text/javascript"></script>
         <f:event type="preRenderView" listener="#{templateController.verificarLogin()}"/>
         <script type="text/javascript">
-            $(document).ready(function){
+            $(document).ready(function () {
                 $(".dropdown-button").dropdown();
-            }
+            });
         </script>
     </h:head>
 
@@ -35,6 +34,30 @@
 
             main {
                 flex: 1 0 auto;
+            }
+            .tabs .indicator {
+                background-color:#64dd17;
+                height: 5px;
+            }
+            .ui-datatable.borderless thead th,
+            .ui-datatable.borderless tbody,
+            .ui-datatable.borderless tbody tr,
+            .ui-datatable.borderless tbody td {
+                border-style: none;
+            }
+            .ui-datatable tbody tr,
+            .ui-datatable tbody td{
+                height: 80px;
+            }
+            .ui-growl-item-container {
+                background-color: whitesmoke;
+                opacity: 1;
+            }
+            .nomargin{
+                margin:0;
+            }
+            .nopadding{
+                padding:0;
             }
         </style>
         <main>
@@ -75,7 +98,11 @@
 
             <div id="top">
                 <ui:insert name="top">
-                    <h4 style="text-align: center" > <h:outputText value="#{templateController.nomeUsuario}, seja bem vindo ao SisReserva UFF, o seu sistema de reserva de salas." /> </h4>
+                    <div class="section"></div>
+                    <div style="text-align: center">
+                        <h:outputText value="#{templateController.nomeUsuario}, seja bem vindo ao SisReserva UFF, o seu sistema de reserva de salas." />
+
+                    </div>
                 </ui:insert>
             </div>
 

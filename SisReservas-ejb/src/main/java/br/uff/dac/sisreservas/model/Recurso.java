@@ -26,7 +26,7 @@ public class Recurso implements Serializable {
     @Column(name="quantidade")
     private int quantidade;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Sala sala;
     
     public Long getIdRecurso() {

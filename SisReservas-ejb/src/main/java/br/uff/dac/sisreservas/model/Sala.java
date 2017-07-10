@@ -28,13 +28,13 @@ public class Sala implements Serializable {
         this.idSala = idSala;
     }
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Andar andar;
     
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne
     private Reserva reserva;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sala", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sala")
     private List<Recurso> recursos;
 
     public Andar getAndar() {

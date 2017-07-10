@@ -7,118 +7,122 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-
         <ui:composition template="./../template/template.xhtml">
             <ui:define name="content">
-                <h1 style="text-align: center" >Manutenção de Usuários</h1>
-                <p:commandButton icon="ui-icon-plusthick" value="Novo" onclick="PF('wdialogo').show();" />
-
-                <p:dialog id="dialogo" widgetVar="wdialogo" header="Cadastrar Usuário" resizable="false" closeOnEscape="true" draggable="false" >
-                    <h:form >
-                        <p:growl id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" />
-                        <h:panelGrid id="pgGeral" columns="2" style="margin: 0 auto;">
-                            <p:fieldset legend="Dados do Usuário">
-                                <h:panelGrid columns="3" id="pgDadosUsuario">
-                                    <p:outputLabel for="txtNome" value="Nome" />
-
-                                    <p:inputText id="txtNome" value="#{usuarioController.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!" />
-
-                                    <p:message for="txtNome" /> 
-
-                                    <p:outputLabel for="txtCPF" value="CPF" />
-
-                                    <p:inputText id="txtCPF" value="#{usuarioController.pessoa.cpf}" required="true" requiredMessage="O CPF é obrigatório!" />
-
-                                    <p:message for="txtCPF" /> 
-
-                                    <p:outputLabel for="txtTelefone" value="Telefone" />
-
-                                    <p:inputText id="txtTelefone" value="#{usuarioController.pessoa.telefone}" required="true" requiredMessage="O telefone é obrigatório!" />
-
-                                    <p:message for="txtTelefone" /> 
-
-                                    <p:outputLabel for="txtEndereco" value="Endereço" />
-
-                                    <p:inputText id="txtEndereco" value="#{usuarioController.pessoa.endereco}" required="true" requiredMessage="O endereço é obrigatório!" />
-
-                                    <p:message for="txtEndereco" />         
-
-                                </h:panelGrid>
-                            </p:fieldset>       
-                            <p:fieldset legend="Dados da Conta">
-                                <h:panelGrid  columns="3" id="pgDadosConta">
-                                    <p:outputLabel for="tipo" value="Tipo de Usuário" />
-
-                                    <p:selectOneMenu id="tipo" value="#{usuarioController.usuario.tipo}" required="true" 
-                                                     requiredMessage="O tipo de usuário é obrigatório!"  >
-                                        <f:selectItem itemValue="A" itemLabel="Administrador" />
-                                        <f:selectItem itemValue="P" itemLabel="Usuário Padrão" />
-                                    </p:selectOneMenu>
-
-                                    <p:message for="tipo"  />
-
-                                    <p:outputLabel for="txtEmail" value="E-mail" />
-
-                                    <p:inputText id="txtEmail" value="#{usuarioController.usuario.email}" required="true" requiredMessage="O e-mail é obrigatório!" />
-
-                                    <p:message for="txtEmail" /> 
-
-                                    <p:outputLabel for="senha" value="Senha" />
-
-                                    <p:password id="senha" value="#{usuarioController.usuario.senha}" required="true"
-                                                feedback="true" promptLabel="Insira uma senha" weakLabel="Fraca"
-                                                goodLabel="Boa" strongLabel="Forte" match="conf_senha"
-                                                validatorMessage="As senhas não coincidem" requiredMessage="A senha é obrigatória!"/>
-
-                                    <p:message for="senha" />
-
-                                    <p:outputLabel for="conf_senha" value="Confirmar Senha" />
-
-                                    <p:password id="conf_senha" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
-
-                                    <p:message for="conf_senha" />
-
-                                </h:panelGrid>
-
-                            </p:fieldset>
-                            <p:commandButton value="Cancelar" icon="ui-icon-close" style="float:right" immediate="true" onclick="PF('wdialogo').hide();" />
-                             <p:commandButton value="Cadastrar" icon="ui-icon-"  update="pgDadosConta, pgDadosUsuario, mensagem :formTabela:tabela" actionListener="#{usuarioController.cadastrarPeloAdministrador()}" />
-                        </h:panelGrid>
-
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('select').material_select();
+                        $('.modal').modal();
+                        $('ul.tabs').tabs();
+                        $("#btnContinue").click(function () {
+                            $('ul.tabs').tabs('select_tab', 'tabDadosUsuario');
+                        });
+                        $("#btnNew").click(function () {
+                            $("#dlgCadastroUsuarioTitulo").text("Novo Usuário");
+                            setTimeout(function () {
+                                $('ul.tabs').tabs('select_tab', 'tabDadosPessoais');
+                            }, 100);
+                        });
+                    });
+                </script>
+                <p:growl id="mensagem" class="gray lighten-1" autoUpdate="false" severity="info, fatal" showDetail="true" />
+                <h:form id="formulario" >
+                    <div id="dlgCadastroUsuario" class="modal gray lighten-1" style="width: 50%" >
+                        <div id="modalCadastroUsuario" class="modal-content">
+                            <h3 id="dlgCadastroUsuarioTitulo" align="center">Novo Usuário</h3>
+                            <ul id="tabs-swipe-demo" class="tabs teal lighten-1  ">
+                                <li class="tab" ><a class="active white-text" href="#tabDadosPessoais">Dados Pessoais</a></li>
+                                <li class="tab"><a class="white-text" href="#tabDadosUsuario">Dados de Login</a></li>
+                            </ul>
+                            <div id="tabDadosPessoais" class="gray darken-1">
+                                <p:outputLabel for="txtNome" value="Nome" />
+                                <p:inputText id="txtNome" value="#{usuarioController.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!" />
+                                <p:message id="msgNome" for="txtNome" /> 
+                                <p:outputLabel for="txtCPF" value="CPF" />
+                                <p:inputText id="txtCPF" value="#{usuarioController.pessoa.cpf}" required="true" requiredMessage="O CPF é obrigatório!" />
+                                <p:message id="msgCPF" for="txtCPF" /> 
+                                <p:outputLabel for="txtTelefone" value="Telefone" />
+                                <p:inputText id="txtTelefone" value="#{usuarioController.pessoa.telefone}" required="true" requiredMessage="O telefone é obrigatório!" />
+                                <p:message id="msgTelefone" for="txtTelefone" /> 
+                                <p:outputLabel for="txtEndereco" value="Endereço" />
+                                <p:inputText id="txtEndereco" value="#{usuarioController.pessoa.endereco}" required="true" requiredMessage="O endereço é obrigatório!" />
+                                <p:message id="msgEndereco" for="txtEndereco" />         
+                                <div>
+                                    <p:commandButton class="btn waves-effect red darken-1 modal-action modal-close" value="Cancelar" style="margin-right: 10px" />
+                                    <a id="btnContinue" class="waves-effect btn blue darken-2" href="#tabDadosUsuario" >Avançar</a>
+                                </div>
+                            </div> <!-- tabDadosPessoais -->
+                            <div id="tabDadosUsuario" class="gray darken-1">
+                                <label for="tipo">Tipo de Usuário</label>
+                                <h:selectOneMenu id="tipo" class="input-field" value="#{usuarioController.usuario.tipo}" 
+                                                 required="true" requiredMessage="O tipo é obrigatório!">
+                                    <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha" /> 
+                                    <f:selectItem itemValue = "A" itemLabel = "Administrador" />   
+                                    <f:selectItem itemValue = "P" itemLabel = "Usuário Padrão" />   
+                                </h:selectOneMenu>
+                                <p:message id="msgTipo" for="tipo" /> 
+                                <p:outputLabel for="txtEmail" value="E-mail" />
+                                <p:inputText id="txtEmail" value="#{usuarioController.usuario.email}" required="true" requiredMessage="O e-mail é obrigatório!" />
+                                <p:message id="msgEmail" for="txtEmail" /> 
+                                <p:outputLabel for="senha" value="Senha" />
+                                <p:password id="senha" value="#{usuarioController.usuario.senha}" required="true"
+                                            match="conf_senha" validatorMessage="As senhas não coincidem"
+                                            requiredMessage="A senha é obrigatória!"/>
+                                <p:message id="msgSenha" for="senha" />
+                                <p:outputLabel for="conf_senha" value="Confirmar Senha" />
+                                <p:password id="conf_senha" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
+                                <p:message id="msgConfSenha" for="conf_senha" />
+                                <div>
+                                    <p:commandButton class="btn waves-effect red darken-1 modal-action modal-close" value="Cancelar" style="margin-right: 10px" />
+                                    <p:commandButton id="btnCadastrar" class="btn blue darken-1" value="OK" update="msgNome, msgCPF, msgEndereco, msgTelefone, msgTipo, msgEmail, msgSenha, msgConfSenha, mensagem, :formTabela:tabela" actionListener="#{usuarioController.cadastrarPeloAdministrador()}" />
+                                </div>
+                            </div> <!-- tabDadosUsuario -->
+                        </div> <!-- modalCadastroUsuario -->
+                    </div> <!-- dlgCadastroUsuario -->  
+                </h:form> <!-- formulario -->
+                
+                <h3 align="center" >Gerenciar Usuários</h3>
+                <div class="container" style="width:80%">
+                    <a id="btnNew" class="btn-floating btn-large teal lighten-3 waves-effect modal-trigger z-depth-3" href="#dlgCadastroUsuario" style="margin:10px"><i class="material-icons">add</i></a>
+                    <h:form id="formTabela">
+                        <p:dataTable  id="tabela" tableStyleClass="striped" styleClass="borderless" value="#{usuarioController.usuarios}" var="usuario" >
+                            <p:column headerText="Usuário">
+                                <h:outputText  value="#{usuario.idUsuario.nome}" />
+                            </p:column>
+                            <p:column headerText="E-mail">
+                                <h:outputText value="#{usuario.email}" />
+                            </p:column>                        
+                            <p:column headerText="CPF" >
+                                <h:outputText value="#{usuario.idUsuario.cpf}" />
+                            </p:column>
+                            <p:column headerText="Endereço" >
+                                <h:outputText value="#{usuario.idUsuario.endereco}" />
+                            </p:column>
+                            <p:column headerText="Telefone" >
+                                <h:outputText value="#{usuario.idUsuario.telefone}" />
+                            </p:column>    
+                            <p:column headerText="Ações" >
+                                <div align="center">
+                                    <div style="display: inline;" >
+                                        <!--
+                                        <h:commandLink class="btn-flat icone nomargin nopadding" title="Ver Perfil">
+                                            <i class="material-icons left nomargin">supervisor_account</i>
+                                        </h:commandLink>
+                                        -->
+                                        <p:commandLink class="btn-flat icone nomargin nopadding" title="Editar" actionListener="#{usuarioController.exibir(usuario)}">
+                                            <i class="material-icons left nomargin">mode_edit</i>
+                                        </p:commandLink>
+                                        <h:commandLink class="btn-flat icone nomargin nopadding" title="Excluir" actionListener="#{usuarioController.excluir(usuario)}" rendered="#{!usuarioController.isLogado(usuario)}" >
+                                            <i class="material-icons left nomargin">delete</i>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </p:column>
+                        </p:dataTable>
                     </h:form>
-                </p:dialog>
-
-
-
-                <p:separator/>
-
-                <h:form id="formTabela">
-                    <p:dataTable  id="tabela" value="#{usuarioController.usuarios}" var="usuario" >
-                        <p:column headerText="Usuário">
-                            <h:outputText value="#{usuario.idUsuario.nome}" />
-                        </p:column>
-                        <p:column headerText="E-mail">
-                            <h:outputText value="#{usuario.email}" />
-                        </p:column>                        
-                        <p:column headerText="CPF" >
-                            <h:outputText value="#{usuario.idUsuario.cpf}" />
-                        </p:column>
-                        <p:column headerText="Endereço" >
-                            <h:outputText value="#{usuario.idUsuario.endereco}" />
-                        </p:column>
-                        <p:column headerText="Telefone" >
-                            <h:outputText value="#{usuario.idUsuario.telefone}" />
-                        </p:column>                        
-                        <p:column headerText="Ações">
-                            <h:commandLink value="Visualizar" style="margin-right: 10px" />
-                            <h:commandLink value="Editar" actionListener="#{usuarioController.exibir(usuario)}" style="margin-right: 10px" />
-                            <h:commandLink value="Excluir" actionListener="#{usuarioController.excluir(usuario)}" />
-                        </p:column>
-                    </p:dataTable>
-
-                </h:form>
+                </div>
+                <div class="section"></div>
             </ui:define>
         </ui:composition>
-
     </body>
 </html>

@@ -27,7 +27,7 @@ public class Campus implements Serializable {
     @Column(name="endereco")
     private String endereco;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campus", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campus")
     private List<Predio> predios;
 
     public Long getIdCampus() {
