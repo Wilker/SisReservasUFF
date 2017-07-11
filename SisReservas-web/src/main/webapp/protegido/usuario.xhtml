@@ -70,7 +70,7 @@
                                             requiredMessage="A senha é obrigatória!"/>
                                 <p:message id="msgSenha" for="senha" />
                                 <p:outputLabel for="conf_senha" value="Confirmar Senha" />
-                                <p:password id="conf_senha" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
+                                <p:password id="conf_senha" value="#{usuarioController.usuario.senha}" required="true" requiredMessage="A confirmação de senha é obrigatória!"/>
                                 <p:message id="msgConfSenha" for="conf_senha" />
                                 <div>
                                     <p:commandButton class="btn waves-effect red darken-1 modal-action modal-close" value="Cancelar" style="margin-right: 10px" />
@@ -85,21 +85,21 @@
                 <div class="container" style="width:80%">
                     <a id="btnNew" class="btn-floating btn-large teal lighten-3 waves-effect modal-trigger z-depth-3" href="#dlgCadastroUsuario" style="margin:10px"><i class="material-icons">add</i></a>
                     <h:form id="formTabela">
-                        <p:dataTable  id="tabela" tableStyleClass="striped" styleClass="borderless" value="#{usuarioController.usuarios}" var="usuario" >
-                            <p:column headerText="Usuário">
-                                <h:outputText  value="#{usuario.idUsuario.nome}" />
+                        <p:dataTable  id="tabela" tableStyleClass="striped" styleClass="borderless" value="#{usuarioController.usuarios}" var="usuario" emptyMessage="Nenhum usuário encontrado!" filteredValue="#{usuarioController.usuariosFiltrados}" >
+                            <p:column headerText="Usuário" filterBy="#{usuario.idPessoa.nome}" filterMatchMode="contains">
+                                <h:outputText  value="#{usuario.idPessoa.nome}" />
                             </p:column>
-                            <p:column headerText="E-mail">
+                            <p:column headerText="E-mail" filterBy="#{usuario.email}" filterMatchMode="contains">
                                 <h:outputText value="#{usuario.email}" />
                             </p:column>                        
-                            <p:column headerText="CPF" >
-                                <h:outputText value="#{usuario.idUsuario.cpf}" />
+                            <p:column headerText="CPF" filterBy="#{usuario.idPessoa.cpf}" filterMatchMode="contains" >
+                                <h:outputText value="#{usuario.idPessoa.cpf}" />
                             </p:column>
-                            <p:column headerText="Endereço" >
-                                <h:outputText value="#{usuario.idUsuario.endereco}" />
+                            <p:column headerText="Endereço" filterBy="#{usuario.idPessoa.endereco}" filterMatchMode="contains" >
+                                <h:outputText value="#{usuario.idPessoa.endereco}" />
                             </p:column>
-                            <p:column headerText="Telefone" >
-                                <h:outputText value="#{usuario.idUsuario.telefone}" />
+                            <p:column headerText="Telefone" filterBy="#{usuario.idPessoa.telefone}" filterMatchMode="contains" >
+                                <h:outputText value="#{usuario.idPessoa.telefone}" />
                             </p:column>    
                             <p:column headerText="Ações" >
                                 <div align="center">

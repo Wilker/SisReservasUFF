@@ -23,6 +23,8 @@ public class UsuarioController implements Serializable {
     private Usuario usuario;
 
     private List<Usuario> usuarios;
+    
+    private List<Usuario> usuariosFiltrados;
 
     private Pessoa pessoa;
 
@@ -32,6 +34,7 @@ public class UsuarioController implements Serializable {
         this.pessoa = this.usuario.getIdPessoa();
         this.usuario.setIdPessoa(this.pessoa);
         this.usuarios = this.usuarioEJB.findAll();
+        this.usuariosFiltrados = this.usuarios;
     }
 
     public Usuario getUsuario() {
@@ -48,6 +51,14 @@ public class UsuarioController implements Serializable {
 
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
+    }
+
+    public List<Usuario> getUsuariosFiltrados() {
+        return usuariosFiltrados;
+    }
+
+    public void setUsuariosFiltrados(List<Usuario> usuariosFiltrados) {
+        this.usuariosFiltrados = usuariosFiltrados;
     }
 
     public Pessoa getPessoa() {

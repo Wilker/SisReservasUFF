@@ -1,11 +1,10 @@
 package br.uff.dac.sisreservas.controller;
 
-import br.uff.dac.sisreservas.ejb.AndarFacadeLocal;
 import br.uff.dac.sisreservas.ejb.CampusFacadeLocal;
 import br.uff.dac.sisreservas.ejb.PredioFacadeLocal;
-import br.uff.dac.sisreservas.model.Andar;
 import br.uff.dac.sisreservas.model.Campus;
 import br.uff.dac.sisreservas.model.Predio;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -26,9 +25,6 @@ public class PredioController implements Serializable {
     @EJB
     CampusFacadeLocal campusEJB;
 
-    @EJB
-    AndarFacadeLocal andarEJB;
-
     private Predio predio;
 
     private List<Predio> predios;
@@ -39,19 +35,17 @@ public class PredioController implements Serializable {
 
     private List<Campus> campi;
 
-    private Andar andar;
-
-    private List<Andar> andares;
-
     @PostConstruct
     public void init() {
         this.predio = new Predio();
         this.campus = new Campus();
+        this.predio.setCampus(this.campus);
+
         this.predios = predioEJB.findAll();
         this.prediosFiltrados = this.predios;
+
         this.campi = campusEJB.findAll();
-        this.andar = new Andar();
-        this.andares = this.predio.getAndares();
+
     }
 
     public Predio getPredio() {
@@ -78,36 +72,12 @@ public class PredioController implements Serializable {
         this.prediosFiltrados = prediosFiltrados;
     }
 
-    public Campus getCampus() {
-        return campus;
-    }
-
-    public void setCampus(Campus campus) {
-        this.campus = campus;
-    }
-
     public List<Campus> getCampi() {
         return campi;
     }
 
     public void setCampi(List<Campus> campi) {
         this.campi = campi;
-    }
-
-    public Andar getAndar() {
-        return andar;
-    }
-
-    public void setAndar(Andar andar) {
-        this.andar = andar;
-    }
-
-    public List<Andar> getAndares() {
-        return andares;
-    }
-
-    public void setAndares(List<Andar> andares) {
-        this.andares = andares;
     }
 
     public void cadastrar() {
@@ -125,61 +95,50 @@ public class PredioController implements Serializable {
             RequestContext requestContext = RequestContext.getCurrentInstance();
             requestContext.execute("$('#dlgCadastroPredio').modal('close');");
         } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao cadastrar Predio!"));
-        }
-    }
-    
-      public void cadastrarAndar() {
-        try {
-            this.andar.setPredio(this.predio);
-            this.andarEJB.create(this.andar);
-            this.predio.getAndares().add(this.andar);
-            RequestContext requestContext = RequestContext.getCurrentInstance();
-            requestContext.execute("$('#dlgCadastroAndar').modal('close');");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Andar registrado com sucesso!"));
-        } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao cadastrar Andar!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao cadastrar Prédio!"));
         }
     }
 
     private void criar() {
         try {
-            this.predio.setCampus(this.campus);
             this.predioEJB.create(this.predio);
-            this.atualizarTabela();
-
             String nomePredio = this.predio.getNome();
-            this.predio = new Predio();
-            this.campus = new Campus();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Predio " + nomePredio + " registrado com sucesso!"));
+            this.atualizarTabela();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Prédio " + nomePredio + " registrado com sucesso!"));
         } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao tentar cadastrar Predio!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao tentar cadastrar Prédio!"));
         }
     }
 
     private void editar() {
         try {
             predioEJB.edit(this.predio);
-            this.predios = predioEJB.findAll();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Predio " + this.predio.getNome() + " editado com sucesso!"));
+            this.atualizarTabela();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Prédio " + this.predio.getNome() + " editado com sucesso!"));
         } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao editar Predio!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao editar Prédio!"));
         }
     }
 
-    public void atualizarTabela() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        this.predios = this.predioEJB.findAll();
-        requestContext.update("formTabela:tabela");
+    private void atualizarTabela() {
+        this.init();
+        try {
+            //RequestContext requestContext = RequestContext.getCurrentInstance();
+            //requestContext.update(":formTabela:tabela");
+            //Com Ajax não funcionou, a saída foi atualizar toda a página.
+            FacesContext.getCurrentInstance().getExternalContext().redirect("./predio.sis");
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao atualizar tabela de Prédios!"));
+        }
     }
 
     public void excluir(Predio predio) {
         try {
             this.predioEJB.remove(predio);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Predio excluído com sucesso!"));
-            atualizarTabela();
+            this.atualizarTabela();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Prédio excluído com sucesso!"));
         } catch (Exception ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao excluir Predio!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao excluir Prédio!"));
         }
     }
 
@@ -188,11 +147,5 @@ public class PredioController implements Serializable {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.execute("$('#dlgCadastroPredio').modal('open');"
                 + "$('#dlgCadastroPredioTitulo').text(\"Atualizar Prédio\");");
-    }
-
-    public void exibirAndar(Predio predio) {
-        this.predio = predio;
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("$('#dlgCadastroAndar').modal('open');");
     }
 }

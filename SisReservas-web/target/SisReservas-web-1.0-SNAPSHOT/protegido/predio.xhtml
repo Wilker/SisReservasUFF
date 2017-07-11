@@ -4,8 +4,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
 
@@ -32,7 +31,7 @@
                                          required="true" requiredMessage="O nome do prédio é obrigatório!"/>
                             <p:message id="msgNome" for="txtNome"/>
                             <label for="tipo">Campus</label>
-                            <h:selectOneMenu id="tipo" class="input-field" value="#{predioController.campus.idCampus}" 
+                            <h:selectOneMenu id="tipo" class="input-field" value="#{predioController.predio.campus.idCampus}" 
                                              required="true" requiredMessage="O campus é obrigatório!">
                                 <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"/> 
                                 <f:selectItems value="#{predioController.campi}" var="campus" itemLabel="#{campus.nome}" itemValue="#{campus.idCampus}" /> 
@@ -47,56 +46,18 @@
                         </div>
                     </div>
 
-
-                </h:form>
-
-                <h:form id="formularioAndar">
-                    <!-- Andar -->
-
-                    <div id="dlgCadastroAndar" class="modal gray lighten-1" style="width: 50%" >
-                        <div id="modalCadastroAndar" class="modal-content">
-                            <h3 id="dlgCadastroAndarTitulo" align="center">Novo Andar</h3>
-
-                            <label for="cmbCampus">Campus</label>
-                            <h:selectOneMenu id="cmbCampus" class="input-field" disabled="true" value="#{predioController.predio.campus.idCampus}" 
-                                             required="true" requiredMessage="O campus é obrigatório!">
-                                <f:selectItem itemDisabled="true" itemValue = "#{predioController.predio.campus.idCampus}" itemLabel = "#{predioController.predio.campus.nome}"/> 
-                            </h:selectOneMenu>
-                            <p:message id="msgCampus" for="cmbCampus" /> 
-                            <p:outputLabel for="cmbPredio" value="Prédio"/>
-                            <h:selectOneMenu id="cmbPredio" class="input-field" disabled="true" value="#{predioController.predio.idPredio}" 
-                                             required="true" requiredMessage="O prédio é obrigatório!">
-                                <f:selectItem itemDisabled="true" itemValue = "#{predioController.predio.idPredio}" itemLabel = "#{predioController.predio.nome}"/> 
-                            </h:selectOneMenu>
-                            <p:message id="msgPredio" for="cmbPredio" /> 
-                            <p:outputLabel for="txtNivel" value="Nível do Andar" />
-                            <p:inputText id="txtNivel" value="#{predioController.andar.nivel}" 
-                                         required="true" requiredMessage="O nível do andar é obrigatório!"/>
-                            <p:message id="msgNivel" for="txtNivel"/>
-
-                            <div class="section"></div>
-                            <div>
-                                <p:commandButton class="btn left waves-effect red darken-1 modal-action modal-close" value="Cancelar" style="margin-right: 10px" />
-                                <p:commandButton id="btnCadastrarAndar" class="btn right blue darken-1" value="OK" update="msgCampus, msgPredio, msgNivel, mensagem, formTabela:tabela" actionListener="#{predioController.cadastrarAndar()}" />
-                            </div>
-                            <div class="section"></div>
-                        </div>
-                    </div>
                 </h:form>
 
                 <h3 style="text-align: center" >Gerenciar Prédios</h3>
                 <div class="container" style="width:80%">
                     <a id="btnNew" class="btn-floating btn-large teal lighten-3 waves-effect modal-trigger z-depth-3" href="#dlgCadastroPredio" style="margin:10px"><i class="material-icons">add</i></a>
                     <h:form id="formTabela">
-                        <p:dataTable  id="tabela" widgetVar="tabelaPredios" tableStyleClass="striped" styleClass="borderless"  value="#{predioController.predios}" var="predio" emptyMessage="Nenhum prédio encontrado!" filteredValue="#{predioController.prediosFiltrados}" >
+                        <p:dataTable  id="tabela" tableStyleClass="striped" styleClass="borderless"  value="#{predioController.predios}" var="predio" emptyMessage="Nenhum prédio encontrado!" filteredValue="#{predioController.prediosFiltrados}" >
                             <p:column headerText="Prédio" filterBy="#{predio.nome}" filterMatchMode="contains" >
                                 <h:outputText value="#{predio.nome}"/>
                             </p:column>
                             <p:column headerText="Campus" filterBy="#{predio.campus.nome}" filterMatchMode ="contains" >
                                 <h:outputText value="#{predio.campus.nome}" />
-                            </p:column>
-                            <p:column headerText="Andares" filterBy="#{predio.andares.size()}" >
-                                <h:outputText value="#{predio.andares.size()}" />
                             </p:column>
                             <p:column headerText="Ações" >
                                 <div style="text-align: center;">
@@ -112,9 +73,6 @@
                                             <i class="material-icons left nomargin">delete</i>
                                         </h:commandLink>
 
-                                        <h:commandLink class="btn-flat icone nomargin nopadding" title="Inserir Andar" actionListener="#{predioController.exibirAndar(predio)}" >
-                                            <i class="material-icons left nomargin">playlist_add</i>
-                                        </h:commandLink>
                                     </div>
                                 </div>
                             </p:column>

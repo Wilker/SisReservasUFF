@@ -81,6 +81,9 @@ public class LoginController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuarioLogin);
                 redirecionamento = "/protegido/principal?faces-redirect=true";
             } else {
+                this.usuario = new Usuario();
+                this.pessoa = new Pessoa();
+                this.usuario.setIdPessoa(this.pessoa);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso!", "Usuário ou senha incorretos!"));
             }
         } catch (Exception ex) {

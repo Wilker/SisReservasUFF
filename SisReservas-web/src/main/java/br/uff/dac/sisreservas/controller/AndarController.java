@@ -6,27 +6,21 @@ import br.uff.dac.sisreservas.ejb.PredioFacadeLocal;
 import br.uff.dac.sisreservas.model.Andar;
 import br.uff.dac.sisreservas.model.Campus;
 import br.uff.dac.sisreservas.model.Predio;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.primefaces.context.RequestContext;
 
 @Named(value = "andarController")
 @ViewScoped
 public class AndarController implements Serializable {
-
-    @PersistenceContext(unitName = "br.uff.dac.sisreservas_unidade_persistencia")
-    private EntityManager em;
 
     @EJB
     private CampusFacadeLocal campusEJB;
@@ -46,16 +40,33 @@ public class AndarController implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.campi = campusEJB.findAll();
         this.campus = new Campus();
-        this.predios = predioEJB.findAll();
         this.predio = new Predio();
-        this.andares = andarEJB.findAll();
         this.andar = new Andar();
+        this.andar.setPredio(this.predio);
+
+        this.campi = campusEJB.findAll();
+        this.predios = predioEJB.findAll();
+        this.andares = andarEJB.findAll();
+        this.andaresFiltrados = this.andares;
+    }
+
+    public List<Campus> getFilteredCampi() {
+        List<Campus> auxCampi = new ArrayList<>();
+        for (Campus c : this.campi) {
+            for (Andar a : this.andares) {
+                if (a.getPredio().getCampus().getIdCampus().equals(c.getIdCampus())) {
+                    if (!auxCampi.contains(c)) {
+                        auxCampi.add(c);
+                    }
+                }
+            }
+        }
+        return auxCampi;
     }
 
     public List<Campus> getCampi() {
-        return campi;
+        return this.campi;
     }
 
     public void setCampi(List<Campus> campi) {
@@ -71,19 +82,21 @@ public class AndarController implements Serializable {
     }
 
     public List<Predio> getPredios() {
-        return predios;
+        List<Predio> auxPredios = new ArrayList<>();
+        for (Predio p : this.predios) {
+            for (Andar a : this.andares) {
+                if (a.getPredio().getIdPredio().equals(p.getIdPredio())) {
+                    if (!auxPredios.contains(p)) {
+                        auxPredios.add(p);
+                    }
+                }
+            }
+        }
+        return auxPredios;
     }
 
     public void setPredios(List<Predio> predios) {
         this.predios = predios;
-    }
-
-    public Predio getPredio() {
-        return predio;
-    }
-
-    public void setPredio(Predio predio) {
-        this.predio = predio;
     }
 
     public List<Andar> getAndares() {
@@ -101,7 +114,7 @@ public class AndarController implements Serializable {
     public void setAndaresFiltrados(List<Andar> andaresFiltrados) {
         this.andaresFiltrados = andaresFiltrados;
     }
-    
+
     public Andar getAndar() {
         return andar;
     }
@@ -131,16 +144,9 @@ public class AndarController implements Serializable {
 
     private void criar() {
         try {
-            this.andar.setPredio(this.predio);
             this.andarEJB.create(this.andar);
             this.atualizarTabela();
-
-            String nomeAndar = Integer.toString(this.andar.getNivel()) + " do Prédio " + this.predio.getNome() + "(Campus " + this.campus.getNome() + " ).";
-
-            this.campus = new Campus();
-            this.predio = new Predio();
-            this.andar = new Andar();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Andar " + nomeAndar + " registrado com sucesso!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Andar registrado com sucesso!"));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao tentar cadastrar Andar!"));
         }
@@ -149,20 +155,23 @@ public class AndarController implements Serializable {
     private void editar() {
         try {
             andarEJB.edit(this.andar);
-            String nomeAndar = Integer.toString(this.andar.getNivel()) + " do Prédio " + this.predio.getNome() + "(Campus " + this.campus.getNome() + " ).";
             this.andares = andarEJB.findAll();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Andar " + nomeAndar + " editado com sucesso!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Andar editado com sucesso!"));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao editar Andar!"));
         }
     }
 
     public void atualizarTabela() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        this.campi = campusEJB.findAll();
-        this.predios = predioEJB.findAll();
-        this.andares = andarEJB.findAll();
-        requestContext.update("formTabela:tabela");
+        this.init();
+        try {
+            //RequestContext requestContext = RequestContext.getCurrentInstance();
+            //requestContext.update(":formTabela:tabela");
+            //Com Ajax não funcionou, a saída foi atualizar toda a página.
+            FacesContext.getCurrentInstance().getExternalContext().redirect("./andar.sis");
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao atualizar tabela de Andares!"));
+        }
     }
 
     public void excluir(Andar andar) {
@@ -182,14 +191,14 @@ public class AndarController implements Serializable {
                 + "$('#dlgCadastroAndarTitulo').text(\"Atualizar Andar\");");
     }
 
-    public void buscarPredios(AjaxBehaviorEvent abe) {
-        try {
-            this.predios = this.andarEJB.buscarPredios(this.campus.getIdCampus());
-        } catch (Exception ex) {
-            RequestContext.getCurrentInstance().execute("alert("+ex.getMessage()+")");
-//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Aviso!", "Erro ao buscar prédios!"));
+    public void filtrarPredios() {
+        this.predios = this.predioEJB.findAll();
+        this.predios.clear();
+        for (Predio p : this.predioEJB.findAll()) {
+            if (p.getCampus().getIdCampus().equals(this.campus.getIdCampus())) {
+                this.predios.add(p);
+            }
         }
-
     }
 
 }

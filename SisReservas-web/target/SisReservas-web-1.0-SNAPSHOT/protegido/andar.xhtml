@@ -17,9 +17,13 @@
                         $('.modal').modal();
                         $("#btnNew").click(function () {
                             $("#dlgCadastroAndarTitulo").text("Novo Andar");
+                            $('#cmbPredio_input').addClass('input-field');
                         });
                     });
                 </script>
+                <style>
+ 
+                </style>
                 <p:growl id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" />
                 <h:form id="formulario" >
                     <div id="dlgCadastroAndar" class="modal gray lighten-1" style="width: 50%" >
@@ -29,18 +33,19 @@
                             <label for="cmbCampus">Campus</label>
                             <h:selectOneMenu id="cmbCampus" class="input-field" value="#{andarController.campus.idCampus}" 
                                              required="true" requiredMessage="O campus é obrigatório!">
-                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"/> 
-                                <f:selectItems value="#{andarController.campi}" var="campus" itemLabel="#{campus.nome}" itemValue="#{campus.idCampus}" /> 
-                                <p:ajax listener="#{andarController.buscarPredios}" update="formulario:cmbPredio"/>
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha" /> 
+                                <f:selectItems value="#{andarController.campi}" var="campus" itemLabel="#{campus.nome}" itemValue="#{campus.idCampus}" />
+                                <p:ajax update=":formulario:cmbPredio" listener="#{andarController.filtrarPredios()}" /> 
                             </h:selectOneMenu>
                             <p:message id="msgCampus" for="cmbCampus" /> 
-                                <p:outputLabel for="cmbPredio" value="Prédio"/>
-                                <h:selectOneMenu id="cmbPredio" class="input-field" value="#{andarController.predio.idPredio}" 
-                                                 required="true" requiredMessage="O prédio é obrigatório!">
-                                    <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"/> 
-                                    <f:selectItems value="#{andarController.predios}" var="predio" itemLabel="#{predio.nome}" itemValue="#{predio.idPredio}" /> 
-                                </h:selectOneMenu>
-                                <p:message id="msgPredio" for="cmbPredio" /> 
+                            <p:outputLabel for="cmbPredio" value="Prédio"/>
+                            <br/>
+                            <p:selectOneMenu id="cmbPredio" autoWidth="false" value="#{andarController.andar.predio.idPredio}"
+                                             required="true" requiredMessage="O prédio é obrigatório!">
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"  /> 
+                                <f:selectItems  value="#{andarController.predios}" var="predio" itemLabel="#{predio.nome}" itemValue="#{predio.idPredio}" /> 
+                            </p:selectOneMenu>
+                            <p:message id="msgPredio" for="cmbPredio" /> 
                             <p:outputLabel for="txtNivel" value="Nível do Andar" />
                             <p:inputText id="txtNivel" value="#{andarController.andar.nivel}" 
                                          required="true" requiredMessage="O nível do andar é obrigatório!"/>
@@ -61,10 +66,27 @@
                     <a id="btnNew" class="btn-floating btn-large teal lighten-3 waves-effect modal-trigger z-depth-3" href="#dlgCadastroAndar" style="margin:10px"><i class="material-icons">add</i></a>
                     <h:form id="formTabela">
                         <p:dataTable  id="tabela" widgetVar="tabelaAndares" tableStyleClass="striped" styleClass="borderless"  value="#{andarController.andares}" var="andar" emptyMessage="Nenhum andar encontrado!" filteredValue="#{andarController.andaresFiltrados}" >
-                            <p:column headerText="Andar" filterBy="#{andar.nome}" filterMatchMode="contains" >
-                                <h:outputText value="#{andar.nome}"/>
+                            <p:column headerText="Andar" filterBy="#{andar.nivel}" filterMatchMode="contains" >
+                                <h:outputText value="#{andar.nivel}"/>
                             </p:column>
-                            <p:column headerText="Campus" filterBy="#{andar.predio.nome}" filterMatchMode ="contains" >
+
+                            <p:column headerText="Campus" filterBy="#{andar.predio.campus.idCampus}" filterMatchMode ="exact" >
+                                <f:facet name="filter">
+                                    <p:selectOneMenu  onchange="PF('tabelaAndares').filter()" >
+                                        <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{andarController.filteredCampi}" var="campus" itemValue="#{campus.idCampus}" itemLabel="#{campus.nome}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{andar.predio.campus.nome}" />
+                            </p:column>
+
+                            <p:column headerText="Prédio" filterBy="#{andar.predio.idPredio}" filterMatchMode ="exact" >
+                                <f:facet name="filter">
+                                    <p:selectOneMenu  onchange="PF('tabelaAndares').filter()" >
+                                        <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{andarController.predios}" var="predio" itemValue="#{predio.idPredio}" itemLabel="#{predio.nome}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
                                 <h:outputText value="#{andar.predio.nome}" />
                             </p:column>
                             <p:column headerText="Ações" >

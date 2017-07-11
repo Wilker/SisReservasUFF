@@ -22,11 +22,14 @@ public class CampusController implements Serializable {
     private Campus campus;
 
     private List<Campus> campi;
+    
+    private List<Campus> campiFiltrados;
 
     @PostConstruct
     public void init() {
         this.campus = new Campus();
         this.campi = campusEJB.findAll();
+        this.campiFiltrados = this.campi;
     }
 
     public Campus getCampus() {
@@ -43,6 +46,14 @@ public class CampusController implements Serializable {
 
     public void setCampi(List<Campus> campi) {
         this.campi = campi;
+    }
+
+    public List<Campus> getCampiFiltrados() {
+        return campiFiltrados;
+    }
+
+    public void setCampiFiltrados(List<Campus> campiFiltrados) {
+        this.campiFiltrados = campiFiltrados;
     }
 
     public void cadastrar() {

@@ -41,11 +41,11 @@
                 <div class="container" style="width:80%">
                     <a id="btnNew" class="btn-floating btn-large teal lighten-3 waves-effect modal-trigger z-depth-3" href="#dlgCadastroCampus" style="margin:10px"><i class="material-icons">add</i></a>
                     <h:form id="formTabela">
-                        <p:dataTable  id="tabela" tableStyleClass="striped" styleClass="borderless"  value="#{campusController.campi}" var="campus" >
-                            <p:column headerText="Campus" >
+                        <p:dataTable  id="tabela" tableStyleClass="striped" styleClass="borderless"  value="#{campusController.campi}" var="campus" emptyMessage="Nenhum campus encontrado!" filteredValue="#{campusController.campiFiltrados}" >
+                            <p:column headerText="Campus" filterBy="#{campus.nome}" filterMatchMode="contains" >
                                 <h:outputText value="#{campus.nome}" />
                             </p:column>
-                            <p:column headerText="Endereço" >
+                            <p:column headerText="Endereço" filterBy="#{campus.endereco}" filterMatchMode="contains" >
                                 <h:outputText value="#{campus.endereco}" />
                             </p:column>
                             <p:column headerText="Ações" >
