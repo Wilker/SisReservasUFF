@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="content">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('select').material_select();
+                        $('.modal').modal();
+                        $("#btnNew").click(function () {
+                            $("#dlgCadastroRecursoTitulo").text("Novo Recurso");
+                        });
+                    });
+                </script>
+                <p:growl id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" />
+                <h:form id="formulario" >
+                    <div id="dlgCadastroRecurso" class="modal gray lighten-1" style="width: 50%" >
+                        <div id="modalCadastroRecurso" class="modal-content">
+                            <h3 id="dlgCadastroRecursoTitulo" align="center">Novo Recurso</h3>
+
+                            <label for="cmbCampus">Campus</label>
+                            <h:selectOneMenu id="cmbCampus" class="input-field" value="#{recursoController.recurso.sala.andar.predio.campus.idCampus}" 
+                                             required="true" requiredMessage="O campus é obrigatório!">
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha" /> 
+                                <f:selectItems value="#{recursoController.campi}" var="campus" itemLabel="#{campus.nome}" itemValue="#{campus.idCampus}" />
+                                <p:ajax update=":formulario:cmbPredio" listener="#{recursoController.filtrarPredios()}" /> 
+                            </h:selectOneMenu>
+                            <p:message id="msgCampus" for="cmbCampus" /> 
+
+                            <p:outputLabel for="cmbPredio" value="Prédio"/>
+                            <br/>                            
+                            <p:selectOneMenu id="cmbPredio" autoWidth="false" value="#{recursoController.recurso.sala.andar.predio.idPredio}"
+                                             required="true" requiredMessage="O prédio é obrigatório!">
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"  /> 
+                                <f:selectItems  value="#{recursoController.predios}" var="predio" itemLabel="#{predio.nome}" itemValue="#{predio.idPredio}" /> 
+                                <p:ajax update=":formulario:cmbAndar" listener="#{recursoController.filtrarAndares()}" /> 
+                            </p:selectOneMenu>
+                            <p:message id="msgPredio" for="cmbPredio" /> 
+
+                            <p:outputLabel for="cmbAndar" value="Andar"/>
+                            <br/>                            
+                            <p:selectOneMenu id="cmbAndar" autoWidth="false" value="#{recursoController.recurso.sala.andar.idAndar}"
+                                             required="true" requiredMessage="O andar é obrigatório!">
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"  /> 
+                                <f:selectItems  value="#{recursoController.andares}" var="andar" itemLabel="#{andar.nivel}" itemValue="#{andar.idAndar}" />  
+                                <p:ajax update=":formulario:cmbSala" listener="#{recursoController.filtrarSalas()}" />                             
+                            </p:selectOneMenu>
+                            <p:message id="msgAndar" for="cmbAndar" /> 
+
+                            <p:outputLabel for="cmbSala" value="Sala"/>
+                            <br/>                            
+                            <p:selectOneMenu id="cmbSala" autoWidth="false" value="#{recursoController.recurso.sala.idSala}"
+                                             required="true" requiredMessage="A sala é obrigatório!">
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"  /> 
+                                <f:selectItems  value="#{recursoController.salas}" var="sala" itemLabel="#{sala.nome}" itemValue="#{sala.idSala}" />  
+                            </p:selectOneMenu>
+                            <p:message id="msgSala" for="cmbSala" />                             
+                            <br/>        
+                            <p:outputLabel for="cmbRecurso" value="Tipo de Recurso"/>
+                            <br/>                             
+                            <p:selectOneMenu id="cmbRecurso" autoWidth="false" value="#{recursoController.recurso.tipo}"
+                                             required="true" requiredMessage="O recurso é obrigatório!">
+                                <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"  /> 
+                                <f:selectItems  value="#{recursoController.tiposRecurso}" var="recurso" itemLabel="#{recurso}" itemValue="#{recurso}" />  
+                            </p:selectOneMenu>
+                            <p:message id="msgRecurso" for="cmbRecurso" />  
+
+                            <p:outputLabel for="txtQnt" value="Quantidade" />
+                            <br/>  
+                            <p:inputNumber id="txtQnt" decimalPlaces="0" value="#{recursoController.recurso.quantidade}" 
+                                         required="true" requiredMessage="A quantidade é obrigatória!"/>
+                            <p:message id="msgQnt" for="txtQnt"/>
+
+                            <div class="section"></div>
+                            <div>
+                                <p:commandButton class="btn left waves-effect red darken-1 modal-action modal-close" value="Cancelar" style="margin-right: 10px" />
+                                <p:commandButton id="btnCadastrar" class="btn right blue darken-1" value="OK" update="msgCampus, msgPredio, msgAndar, msgSala, msgRecurso, mensagem, :formTabela:tabela" actionListener="#{recursoController.cadastrar()}" />
+                            </div>
+                            <div class="section"></div>
+                        </div>
+                    </div>
+                </h:form>
+
+                <h3 style="text-align: center" >Gerenciar Recursos</h3>
+                <div class="container" style="width:80%">
+                    <a id="btnNew" class="btn-floating btn-large teal lighten-3 waves-effect modal-trigger z-depth-3" href="#dlgCadastroRecurso" style="margin:10px"><i class="material-icons">add</i></a>
+                    <h:form id="formTabela">
+                        <p:dataTable  id="tabela" widgetVar="tabelaRecursos" tableStyleClass="striped" styleClass="borderless"  value="#{recursoController.recursos}" var="recurso" emptyMessage="Nenhum recurso encontrada!" filteredValue="#{recursoController.recursosFiltrados}" >
+                            <p:column headerText="Recurso" filterBy="#{recurso.tipo}" filterMatchMode="contains" >
+                                <h:outputText value="#{recurso.tipo}"/>
+                            </p:column>
+                            <p:column headerText="Qnt" filterBy="#{recurso.quantidade}" filterMatchMode="exact" >
+                                <h:outputText value="#{recurso.quantidade}"/>
+                            </p:column>
+                            <p:column headerText="Campus" filterBy="#{recurso.sala.andar.predio.campus.idCampus}" filterMatchMode ="exact" >
+                                <f:facet name="filter">
+                                    <p:selectOneMenu  onchange="PF('tabelaRecursos').filter()" >
+                                        <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{recursoController.campiFiltrados}" var="campus" itemValue="#{campus.idCampus}" itemLabel="#{campus.nome}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{recurso.sala.andar.predio.campus.nome}" />
+                            </p:column>
+
+                            <p:column headerText="Prédio" filterBy="#{recurso.sala.andar.predio.idPredio}" filterMatchMode ="exact" >
+                                <f:facet name="filter">
+                                    <p:selectOneMenu  onchange="PF('tabelaRecursos').filter()" >
+                                        <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{recursoController.prediosFiltrados}" var="predio" itemValue="#{predio.idPredio}" itemLabel="#{predio.nome}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{recurso.sala.andar.predio.nome}" />
+                            </p:column>
+
+                            <p:column headerText="Andar" filterBy="#{recurso.sala.andar.idAndar}" filterMatchMode ="exact" >
+                                <f:facet name="filter">
+                                    <p:selectOneMenu  onchange="PF('tabelaRecursos').filter()" >
+                                        <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{recursoController.andaresFiltrados}" var="andar" itemValue="#{andar.idAndar}" itemLabel="#{andar.nivel}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{recurso.sala.andar.nivel}" />
+                            </p:column>
+
+                            <p:column headerText="Sala" filterBy="#{recurso.sala.idSala}" filterMatchMode ="exact" >
+                                <f:facet name="filter">
+                                    <p:selectOneMenu  onchange="PF('tabelaRecursos').filter()" >
+                                        <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{recursoController.salasFiltradas}" var="sala" itemValue="#{sala.idSala}" itemLabel="#{sala.nome}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{recurso.sala.nome}" />
+                            </p:column>                            
+
+                            <p:column headerText="Ações" >
+                                <div style="text-align: center;">
+                                    <div style="display: inline-block;">
+                                        <h:commandLink class="btn-flat icone nomargin nopadding" title="Ver Recursos">
+                                            <i class="material-icons left nomargin">business</i>
+                                        </h:commandLink>
+                                        <h:commandLink class="btn-flat icone nomargin nopadding" title="Editar"  actionListener="#{recursoController.exibir(recurso)}">
+                                            <i class="material-icons left nomargin">mode_edit</i>
+                                        </h:commandLink>
+
+                                        <h:commandLink class="btn-flat icone nomargin nopadding" title="Excluir" actionListener="#{recursoController.excluir(recurso)}" >
+                                            <i class="material-icons left nomargin">delete</i>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+                <div class="section"></div>                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -17,13 +17,9 @@
                         $('.modal').modal();
                         $("#btnNew").click(function () {
                             $("#dlgCadastroAndarTitulo").text("Novo Andar");
-                            $('#cmbPredio_input').addClass('input-field');
                         });
                     });
                 </script>
-                <style>
- 
-                </style>
                 <p:growl id="mensagem" autoUpdate="false" severity="info, fatal" showDetail="true" />
                 <h:form id="formulario" >
                     <div id="dlgCadastroAndar" class="modal gray lighten-1" style="width: 50%" >
@@ -47,7 +43,7 @@
                             </p:selectOneMenu>
                             <p:message id="msgPredio" for="cmbPredio" /> 
                             <p:outputLabel for="txtNivel" value="Nível do Andar" />
-                            <p:inputText id="txtNivel" value="#{andarController.andar.nivel}" 
+                            <p:inputNumber id="txtNivel" decimalPlaces="0" value="#{andarController.andar.nivel}" 
                                          required="true" requiredMessage="O nível do andar é obrigatório!"/>
                             <p:message id="msgNivel" for="txtNivel"/>
 
@@ -74,7 +70,7 @@
                                 <f:facet name="filter">
                                     <p:selectOneMenu  onchange="PF('tabelaAndares').filter()" >
                                         <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItems value="#{andarController.filteredCampi}" var="campus" itemValue="#{campus.idCampus}" itemLabel="#{campus.nome}" />
+                                        <f:selectItems value="#{andarController.campiFiltrados}" var="campus" itemValue="#{campus.idCampus}" itemLabel="#{campus.nome}" />
                                     </p:selectOneMenu>
                                 </f:facet>
                                 <h:outputText value="#{andar.predio.campus.nome}" />
@@ -84,7 +80,7 @@
                                 <f:facet name="filter">
                                     <p:selectOneMenu  onchange="PF('tabelaAndares').filter()" >
                                         <f:selectItem itemLabel="Escolha" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItems value="#{andarController.predios}" var="predio" itemValue="#{predio.idPredio}" itemLabel="#{predio.nome}" />
+                                        <f:selectItems value="#{andarController.prediosFiltrados}" var="predio" itemValue="#{predio.idPredio}" itemLabel="#{predio.nome}" />
                                     </p:selectOneMenu>
                                 </f:facet>
                                 <h:outputText value="#{andar.predio.nome}" />

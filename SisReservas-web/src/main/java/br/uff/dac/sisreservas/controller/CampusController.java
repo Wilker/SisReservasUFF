@@ -2,8 +2,11 @@ package br.uff.dac.sisreservas.controller;
 
 import br.uff.dac.sisreservas.ejb.CampusFacadeLocal;
 import br.uff.dac.sisreservas.model.Campus;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -98,9 +101,15 @@ public class CampusController implements Serializable {
     }
 
     public void atualizarTabela() {
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        this.campi = this.campusEJB.findAll();
-        requestContext.update(":formTabela:tabela");
+        try {
+            //RequestContext requestContext = RequestContext.getCurrentInstance();
+            //requestContext.update(":formTabela:tabela");
+            //Com Ajax não funcionou, a saída foi atualizar toda a página.
+            FacesContext.getCurrentInstance().getExternalContext().redirect("./campus.sis");
+        } catch (IOException ex) {
+            Logger.getLogger(CampusController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void excluir(Campus campus) {

@@ -1,7 +1,6 @@
 package br.uff.dac.sisreservas.ejb;
 
 import br.uff.dac.sisreservas.model.Andar;
-import br.uff.dac.sisreservas.model.Predio;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -21,6 +20,4 @@ public interface AndarFacadeLocal {
     List<Andar> findRange(int[] range);
 
     int count();
-    
-    List<Predio> buscarPredios(Long idCampus) throws Exception ;
 }

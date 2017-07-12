@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,12 +12,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="sala")
+@Table(name = "sala")
 public class Sala implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSala;
+
+    private String nome;
+
+    @ManyToOne
+    private Andar andar;
+
+    @ManyToOne
+    private Reserva reserva;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sala")
+    private List<Recurso> recursos;
 
     public Long getIdSala() {
         return idSala;
@@ -27,16 +38,15 @@ public class Sala implements Serializable {
     public void setIdSala(Long idSala) {
         this.idSala = idSala;
     }
-    
-    @ManyToOne
-    private Andar andar;
-    
-   @ManyToOne
-    private Reserva reserva;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sala")
-    private List<Recurso> recursos;
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    
     public Andar getAndar() {
         return andar;
     }
@@ -77,5 +87,5 @@ public class Sala implements Serializable {
     public String toString() {
         return "br.uff.dac.sisreservas.model.Sala[ id=" + idSala + " ]";
     }
-    
+
 }

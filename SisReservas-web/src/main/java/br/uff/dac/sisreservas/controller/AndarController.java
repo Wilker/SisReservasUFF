@@ -51,7 +51,7 @@ public class AndarController implements Serializable {
         this.andaresFiltrados = this.andares;
     }
 
-    public List<Campus> getFilteredCampi() {
+    public List<Campus> getCampiFiltrados() {
         List<Campus> auxCampi = new ArrayList<>();
         for (Campus c : this.campi) {
             for (Andar a : this.andares) {
@@ -82,8 +82,12 @@ public class AndarController implements Serializable {
     }
 
     public List<Predio> getPredios() {
+        return this.predios;
+    }
+    
+    public List<Predio> getPrediosFiltrados() {
         List<Predio> auxPredios = new ArrayList<>();
-        for (Predio p : this.predios) {
+        for (Predio p : this.predioEJB.findAll()) {
             for (Andar a : this.andares) {
                 if (a.getPredio().getIdPredio().equals(p.getIdPredio())) {
                     if (!auxPredios.contains(p)) {
@@ -192,8 +196,7 @@ public class AndarController implements Serializable {
     }
 
     public void filtrarPredios() {
-        this.predios = this.predioEJB.findAll();
-        this.predios.clear();
+        this.predios = new ArrayList<>();
         for (Predio p : this.predioEJB.findAll()) {
             if (p.getCampus().getIdCampus().equals(this.campus.getIdCampus())) {
                 this.predios.add(p);

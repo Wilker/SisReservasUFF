@@ -4,7 +4,6 @@
     <jta-data-source>jdbc/SisReservas</jta-data-source>
     <class>br.uff.dac.sisreservas.model.Andar</class>
     <class>br.uff.dac.sisreservas.model.Campus</class>
-    <class>br.uff.dac.sisreservas.model.Menu</class>
     <class>br.uff.dac.sisreservas.model.Pessoa</class>
     <class>br.uff.dac.sisreservas.model.Predio</class>
     <class>br.uff.dac.sisreservas.model.Recurso</class>
