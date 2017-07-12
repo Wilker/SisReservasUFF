@@ -20,7 +20,7 @@ public class Predio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPredio;
     
-    @Column(name="nome")
+    @Column(name="nome", unique=true)
     private String nome;
     
     @ManyToOne

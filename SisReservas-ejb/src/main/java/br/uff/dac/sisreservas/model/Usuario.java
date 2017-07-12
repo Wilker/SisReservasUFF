@@ -18,7 +18,7 @@ public class Usuario implements Serializable {
     @JoinColumn(name="id_pessoa", referencedColumnName = "id_pessoa", nullable = false)
     private Pessoa idPessoa;
     
-    @Column(name="email")
+    @Column(name="email", unique=true)
     private String email;
     
     @Column(name="senha")

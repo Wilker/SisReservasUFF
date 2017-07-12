@@ -20,7 +20,7 @@ public class Campus implements Serializable {
     @Column(name="idCampus")
     private Long idCampus;
     
-    @Column(name="nome")
+    @Column(name="nome", unique=true)
     private String nome;
     
     @Column(name="endereco")

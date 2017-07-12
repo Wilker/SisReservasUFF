@@ -20,7 +20,7 @@ public class Pessoa implements Serializable {
     @Column(name="nome")
     private String nome;
     
-    @Column(name="cpf")
+    @Column(name="cpf", unique=true)
     private String cpf;
     
     @Column(name="endereco")
