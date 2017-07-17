@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,14 +17,18 @@ import javax.persistence.Table;
 public class Sala implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSala;
+    
+    @EmbeddedId
+    private IdSala idSala;
 
-    @Column(name="nome", unique=true)
+    @Column(name="nome")
     private String nome;
 
     @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name="nivel_andar", referencedColumnName = "nivel_andar", insertable = false, updatable = false),
+        @JoinColumn(name="id_predio", referencedColumnName = "id_predio" , insertable = false, updatable = false)
+    })
     private Andar andar;
 
     @ManyToOne
@@ -33,11 +37,11 @@ public class Sala implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sala")
     private List<Recurso> recursos;
 
-    public Long getIdSala() {
+    public IdSala getIdSala() {
         return idSala;
     }
 
-    public void setIdSala(Long idSala) {
+    public void setIdSala(IdSala idSala) {
         this.idSala = idSala;
     }
 

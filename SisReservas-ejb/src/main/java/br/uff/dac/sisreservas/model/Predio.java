@@ -3,11 +3,9 @@ package br.uff.dac.sisreservas.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,33 +14,30 @@ import javax.persistence.Table;
 @Table(name="predio")
 public class Predio implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPredio;
+    @EmbeddedId
+    private IdPredio idPredio;
     
-    @Column(name="nome", unique=true)
-    private String nome;
-    
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_campus", referencedColumnName = "id_campus", insertable = false, updatable = false)
     private Campus campus;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "predio")
     private List<Andar> andares;
 
-    public Long getIdPredio() {
+    public IdPredio getIdPredio() {
         return idPredio;
     }
 
-    public void setIdPredio(Long idPredio) {
+    public void setIdPredio(IdPredio idPredio) {
         this.idPredio = idPredio;
     }
 
     public String getNome() {
-        return nome;
+        return this.idPredio.getNome();
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.idPredio.setNome(nome);
     }
 
     public Campus getCampus() {

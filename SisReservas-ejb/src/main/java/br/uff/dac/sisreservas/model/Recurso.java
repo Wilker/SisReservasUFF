@@ -2,12 +2,12 @@ package br.uff.dac.sisreservas.model;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -15,9 +15,8 @@ import javax.persistence.Table;
 @Table(name="recurso")
 public class Recurso implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRecurso;
+    @EmbeddedId
+    private IdRecurso idRecurso;
 
     @Enumerated(EnumType.STRING)
     private TipoRecurso tipo;
@@ -26,13 +25,17 @@ public class Recurso implements Serializable {
     private int quantidade;
     
     @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name="id_sala", referencedColumnName = "id_sala", insertable = false, updatable = false),
+        @JoinColumn(name="id_andar", referencedColumnName = "id_andar", insertable = false, updatable = false)
+    })
     private Sala sala;
     
-    public Long getIdRecurso() {
+    public IdRecurso getIdRecurso() {
         return idRecurso;
     }
 
-    public void setIdRecurso(Long idRecurso) {
+    public void setIdRecurso(IdRecurso idRecurso) {
         this.idRecurso = idRecurso;
     }
 

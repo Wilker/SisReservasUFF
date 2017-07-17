@@ -264,7 +264,7 @@ public class RecursoController implements Serializable {
         }
     }
 
-    public void excluir(Andar andar) {
+    public void excluir(Recurso recurso) {
         try {
             recursoEJB.remove(recurso);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Recurso excluído com sucesso!"));

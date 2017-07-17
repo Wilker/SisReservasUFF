@@ -17,7 +17,7 @@ public class Campus implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idCampus")
+    @Column(name="id_campus")
     private Long idCampus;
     
     @Column(name="nome", unique=true)
@@ -26,7 +26,7 @@ public class Campus implements Serializable {
     @Column(name="endereco")
     private String endereco;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campus")
+    @OneToMany(mappedBy = "campus", cascade = CascadeType.REFRESH)
     private List<Predio> predios;
 
     public Long getIdCampus() {

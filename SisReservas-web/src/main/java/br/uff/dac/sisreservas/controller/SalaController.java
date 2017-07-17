@@ -216,7 +216,7 @@ public class SalaController implements Serializable {
         }
     }
 
-    public void excluir(Andar andar) {
+    public void excluir(Sala sala) {
         try {
             salaEJB.remove(sala);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso!", "Sala excluída com sucesso!"));
@@ -237,7 +237,6 @@ public class SalaController implements Serializable {
         this.predios = new ArrayList<>();
         for (Predio p : this.predioEJB.findAll()) {
             if (p.getCampus().getIdCampus().equals(this.campus.getIdCampus())) {
-                if(p.getAndares().size()>0)
                 this.predios.add(p);
             }
         }

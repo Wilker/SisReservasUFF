@@ -2,48 +2,40 @@ package br.uff.dac.sisreservas.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="andar")
+@Table(name = "andar")
 public class Andar implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAndar;
-    
-    @Column(name="nivel")
-    private int nivel;
-    
+    @EmbeddedId
+    private IdAndar idAndar;
+
     @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name = "id_campus", referencedColumnName = "id_campus", insertable = false, updatable = false),
+        @JoinColumn(name = "nome_predio", referencedColumnName = "nome_predio", insertable = false, updatable = false)
+    })
     private Predio predio;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "andar")
     private List<Sala> salas;
-    
-    
-    public Long getIdAndar() {
+
+    public IdAndar getIdAndar() {
         return idAndar;
     }
 
-    public void setIdAndar(Long idAndar) {
+    public void setIdAndar(IdAndar idAndar) {
         this.idAndar = idAndar;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
     }
 
     public Predio getPredio() {
@@ -62,23 +54,27 @@ public class Andar implements Serializable {
         this.salas = salas;
     }
 
-    
-    
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (idAndar != null ? idAndar.hashCode() : 0);
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.idAndar);
+        hash = 23 * hash + Objects.hashCode(this.predio);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Andar)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Andar other = (Andar) object;
-        if ((this.idAndar == null && other.idAndar != null) || (this.idAndar != null && !this.idAndar.equals(other.idAndar))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Andar other = (Andar) obj;
+        if (!Objects.equals(this.idAndar, other.idAndar)) {
+            return false;
+        }
+        if (!Objects.equals(this.predio, other.predio)) {
             return false;
         }
         return true;
@@ -86,7 +82,7 @@ public class Andar implements Serializable {
 
     @Override
     public String toString() {
-        return "br.uff.dac.sisreservas.model.Andar[ id=" + idAndar + " ]";
+        return "Andar{" + "idAndar=" + idAndar + ", predio=" + predio + '}';
     }
-    
+
 }

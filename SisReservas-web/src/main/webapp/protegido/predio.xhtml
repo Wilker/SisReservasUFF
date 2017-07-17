@@ -31,7 +31,7 @@
                                          required="true" requiredMessage="O nome do prédio é obrigatório!"/>
                             <p:message id="msgNome" for="txtNome"/>
                             <label for="tipo">Campus</label>
-                            <h:selectOneMenu id="tipo" class="input-field" value="#{predioController.predio.campus.idCampus}" 
+                            <h:selectOneMenu id="tipo" class="input-field" value="#{predioController.campus.idCampus}" 
                                              required="true" requiredMessage="O campus é obrigatório!">
                                 <f:selectItem itemDisabled="true" itemValue = "#{null}" itemLabel = "Escolha"/> 
                                 <f:selectItems value="#{predioController.campi}" var="campus" itemLabel="#{campus.nome}" itemValue="#{campus.idCampus}" /> 
