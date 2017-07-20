@@ -27,8 +27,8 @@ br\uff\dac\sisreservas\model\Recurso.class
 br\uff\dac\sisreservas\model\Campus.class
 br\uff\dac\sisreservas\ejb\SalaFacade.class
 br\uff\dac\sisreservas\model\IdPredio_.class
-br\uff\dac\sisreservas\ejb\ReservaFacadeLocal.class
 br\uff\dac\sisreservas\ejb\PessoaFacadeLocal.class
+br\uff\dac\sisreservas\ejb\ReservaFacadeLocal.class
 br\uff\dac\sisreservas\ejb\CampusFacadeLocal.class
 br\uff\dac\sisreservas\model\Predio.class
 br\uff\dac\sisreservas\ejb\RecursoFacadeLocal.class
